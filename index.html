@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script defer type="module" src="./scripts/index.js"></script>
+    <script defer type="module" src="./scripts/Card.js"></script>
+    <script defer type="module" src="./utils/constans.js"></script>
+    <script defer type="module" src="./scripts/FormValidator.js"></script>
+    
+    <title>Место</title>
+    <link rel="stylesheet" href="./pages/index.css"/>
+</head>
+<body class="page">
+
+    <header class="header">
+        <img class="logo" src="./images/logo.svg" alt="Логотип">
+    </header>
+
+    <main class="content">
+        <section class="profile">
+            <div class="profile__info">
+                <img class="profile__avatar" src="./images/avatar.png" alt="Жак Ив-Кусто">
+                <div class="profile__editform">
+                    <div class="profile__text">
+                        <h1 class="profile__title">Жак Ив-Кусто</h1>
+                        <button class="profile__pen" type="button" aria-label="редактировать"></button>
+                    </div>
+                    <p class="profile__subtitle">Исследователь океана</p>
+                </div>
+            </div>
+            <button class="profile__button" type="button" aria-label="добавить"></button>
+        </section>
+
+        <section class="card">
+            <ul class="card__table"></ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer__title">© 2020 Mesto Russia</p>
+    </footer>
+
+    <!--Форма редактирования шапки профиля-->                    
+    <div  class="popup popup_profile">
+        <div class="popup__container popup__container_profile">
+            <button 
+                class="popup__close popup__close_profile" 
+                type="reset" 
+                aria-label="закрыть"></button>
+            <form class="popup__content popup__content_profile" name="userForm" novalidate>
+                <h2 class="popup__text">Редактировать профиль</h2>
+                <input 
+                    class="popup__input popup__input_type_name" 
+                    name="name" 
+                    type="text" 
+                    placeholder="Ваше имя"
+                    id ="name-profile" 
+                    minlength="2" 
+                    maxlength="40"
+                    required>
+                <span id="name-profile-error" class="error"></span>
+                <input 
+                    class="popup__input popup__input_type_job" 
+                    name="job" 
+                    type="text" 
+                    placeholder="Ваша профессия"
+                    id ="job-profile" 
+                    minlength="2" 
+                    maxlength="30"
+                    required>
+                <span id="job-profile-error" class="error"></span>
+                <button 
+                    class="popup__submit popup__submit_profile" 
+                    type="submit" 
+                    aria-label="отправка">Сохранить</button>
+            </form>
+        </div>
+    </div>
+    <!--Форма добавления новой карточки-->
+    <div  class="popup popup_item">
+        <div class="popup__container popup__container_item">
+            <button 
+                class="popup__close popup__close_item" 
+                type="reset" 
+                aria-label="закрыть"></button>
+            <form class="popup__content popup__content_item" name="addForm" novalidate>
+                <h2 class="popup__text popup__text_item">Новое место</h2>
+                <input class="popup__input popup__input_type_title " 
+                    name="name" 
+                    id ="name-item"
+                    type="text" 
+                    placeholder="Название"
+                    minlength="2" 
+                    maxlength="200"
+                    required>
+                <span id ="name-item-error" class="error"></span>
+                <input 
+                    class="popup__input popup__input_type_link" 
+                    type="url"
+                    id="link" 
+                    name="link"
+                    placeholder="Ссылка на картинку"
+                    required>
+                <span id="link-error" class="error"></span>
+                <button 
+                    class="popup__submit popup__submit_item" 
+                    type="submit" 
+                    aria-label="отправка">Создать</button>
+            </form>
+        </div>
+    </div>
+
+    <!--Форма Zoom photo-->
+    <div  class="popup popup_zoom">
+        <div class="popup__container popup__container_zoom">
+            <button 
+                class="popup__close popup__close_zoom" 
+                type="button"
+                aria-label="закрыть"></button>
+            <img class="popup__img popup__img_zoom" 
+                src="#"
+                alt="Название картинки"/>
+            <h2 class="popup__title popup__title_zoom"></h2>
+        </div>
+    </div>
+
+    <!--template-элементы-->
+        <template 
+            id = "card-template"
+            class="card-template">
+                <article class="card__item">
+                    <div class="card__img">
+                        <img 
+                            class="card__photo" 
+                            src="#" 
+                            name="name"
+                            alt="">
+                    </div>
+                    <div class="card__button">
+                        <button 
+                            class="card__button_delete" 
+                            type="button" 
+                            aria-label="удалить"></button>
+                    </div>
+                    <div class="card__text">
+                        <h2 class="card__title"></h2>
+                        <button 
+                            class="card__button_like" 
+                            type="button" 
+                            aria-label="оценить"></button>
+                    </div>
+                </article>
+        </template>
+
+</body>
+</html>
