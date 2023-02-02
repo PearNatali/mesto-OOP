@@ -2,6 +2,7 @@
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 import { items } from '../utils/constans.js';
+import { enableValidation } from '../config/config.js';
 //-----------------------------------------------------------------------------------------------------------------
 //Выборка DOM елеметов для редактирования профиля.
 const profilePopup = document.querySelector('.popup_profile'); //Сам попап по ред.профиля. 
@@ -19,26 +20,24 @@ const profileOpenButton = profileElement.querySelector('.profile__pen'); //Кн�
 //-----------------------------------------------------------------------------------------------------------------
 //Выборка DOM елеметов для добавления новых карточек.
 const itemPopup = document.querySelector('.popup_item'); //Сам попап по доб.карточки.
-//const itemForm = itemPopup.querySelector('.popup__content_item'); //Содержание попап по доб.карточки. 
-//const itemCloseButton = itemPopup.querySelector('.popup__close_item'); //Закрытие попап по доб.карточки.
+const itemForm = itemPopup.querySelector('.popup__content_item'); //Содержание попап по доб.карточки. 
+const itemCloseButton = itemPopup.querySelector('.popup__close_item'); //Закрытие попап по доб.карточки.
 
 const itemPopupInputTitle = itemPopup.querySelector('.popup__input_type_title'); //Название места в попап.
 const itemPopupInputLink = itemPopup.querySelector('.popup__input_type_link'); //Ссылка на картинку в попап.
 
-//const itemCardTable = document.querySelector('.card__table'); //Содержимое контейнера для новых карточек. 
+const itemCardTable = document.querySelector('.card__table'); //Содержимое контейнера для новых карточек. 
 
 const itemOpenButton = profileElement.querySelector('.profile__button'); //Кнопка добавления карточеки.
 const buttonElement = document.querySelector('.popup__submit'); //Кнопка сохранения введеных данных в карточке.
 //-----------------------------------------------------------------------------------------------------------------
 //Выборка DOM елеметов для попапа zoom каринки.
-//const zoomPopup = document.querySelector('.popup_zoom'); //Сам попап zoom картинки. 
+const zoomPopup = document.querySelector('.popup_zoom'); //Сам попап zoom картинки. 
 //const zoomCloseButton = zoomPopup.querySelector('.popup__close_zoom'); //Закрытие попап zoom картинки.
 
-//const zoomPopupImg = zoomPopup.querySelector('.popup__img_zoom'); //Картинка в карточке;
-//const zoomPopupTitle = zoomPopup.querySelector('.popup__title_zoom'); //Подпись карточки;
+const zoomPopupImg = zoomPopup.querySelector('.popup__img_zoom'); //Картинка в карточке;
+const zoomPopupTitle = zoomPopup.querySelector('.popup__title_zoom'); //Подпись карточки;
 //-----------------------------------------------------------------------------------------------------------------
-
-
 //Функция открытия попап (закрытие overlay, закрытие Esc).
 function openPopup(popup) {
   popup.classList.add('popup_opened');
@@ -86,16 +85,41 @@ closeButtons.forEach((button) => {
   button.addEventListener('click', () => closePopup(popup))
 });
 //-----------------------------------------------------------------------------------------------------------------
-//Навешивание слушателя по сохранению данных новой карточки.
-itemForm.addEventListener('submit', submitItemElement);
-//Функция сохранения/отправки данных по новой карточке.
-function submitItemElement(evt) {
-  evt.preventDefault();
-  const newCard = createCard(itemPopupInputLink.value, itemPopupInputTitle.value);
-  itemCardTable.prepend(newCard);
+function openZoomPhoto(name, link) {
+  openPopup(zoomPopup);
+  zoomPopupImg.alt = name;
+  zoomPopupTitle.innerText = name; 
+  zoomPopupImg.src = link;
+};  
+//-----------------------------------------------------------------------------------------------------------------
+//Перебор карточек, добавление карточки:
+items.forEach((item) => {
+  const card = new Card(item.name, item.link, openZoomPhoto, submitDataCard);
+  const cardElement = card.getDataCard();
+  itemCardTable.prepend(cardElement);
+});
+//-----------------------------------------------------------------------------------------------------------------
+function submitDataCard(event) {
+  event.preventDefault();
+  const itemPopupInputTitle = itemPopup.querySelector('.popup__input_type_title'); 
+  const itemPopupInputLink = itemPopup.querySelector('.popup__input_type_link');
+  this._name = itemPopupInputTitle.value;
+  this._link = itemPopupInputLink.value;
   itemForm.reset();
   closePopup(itemPopup);
-};
+}
+//-----------------------------------------------------------------------------------------------------------------
+//Навешивание слушателя по сохранению данных новой карточки.
+//itemForm.addEventListener('submit', submitItemElement);
+//-----------------------------------------------------------------------------------------------------------------
+//Функция сохранения/отправки данных по новой карточке.
+//function submitItemElement(evt) {
+//  evt.preventDefault();
+//  const card = createCard(itemPopupInputLink.value, itemPopupInputTitle.value);
+//  itemCardTable.prepend(card);
+//  itemForm.reset();
+//  closePopup(itemPopup);
+//};
 //-----------------------------------------------------------------------------------------------------------------
 //Изменение значений в шапке профиля
 function handleProfileFormSubmit (evt) {
@@ -106,13 +130,6 @@ function handleProfileFormSubmit (evt) {
   profileJob.textContent = job;
   closePopup(profilePopup);
 };
-enableValidation({
-  formSelector: '.popup__content',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__submit',
-  inactiveButtonClass: 'popup__submit_disable',
-  inputErrorClass: 'popup__input_error',
-});
 //-----------------------------------------------------------------------------------------------------------------
 //Навешивание слушателя по сохранению данных ред.профиля.
 profileForm.addEventListener('submit', handleProfileFormSubmit);

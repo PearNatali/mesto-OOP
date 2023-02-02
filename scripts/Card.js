@@ -1,8 +1,14 @@
-import { items } from '../utils/constans.js'
+import { items } from '../utils/constans.js';
 export class Card {
-    constructor(name, link) {
+    constructor(name, link, openZoomPhoto, submitDataCard) {
         this._name = name;
         this._link = link;
+        this._clickCard = openZoomPhoto;
+        this._submitDataCard = submitDataCard;
+
+        document
+        .querySelector('.popup__content_item')
+        .addEventListener('submit', this._submitDataCard);
     }
     _createCard() {
         const newItem = document
@@ -25,14 +31,9 @@ export class Card {
         });
         this._element
         .querySelector('.card__photo')
-        .addEventListener('click', (evt) => {
-            openPopup(document.querySelector('.popup_zoom'));
-            document.querySelector('.popup__img_zoom').src = evt.target.link;
-            const zoomPopupTitle = document.querySelector('.popup__title_zoom').alt = evt.target.name;
-            zoomPopupTitle.innerText = evt.target.name;
-        });
+        .addEventListener('click', this._openZoomPhoto);
     }
-    getDateCard() {
+    getDataCard() {
         this._element = this._createCard();
         this._setEventListeners();
         this._element.querySelector('.card__title').innerText = this._name;
@@ -41,14 +42,6 @@ export class Card {
         return this._element
     }
 };
-
-items.forEach((item) => {
-    const card = new Card(item.name, item.link);
-    const cardElement = card.getDateCard();
-    document.querySelector('.card__table').prepend(cardElement);
-    document.querySelector('.popup__content_item').reset();
-});
-
 //-----------------------------------------------------------------------------------------------------------------
 //Задаем функцию создания новой карточки:
 //function createCard(link, name) {
