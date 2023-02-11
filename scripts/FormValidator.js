@@ -4,21 +4,22 @@ import { enableValidation } from '../enableValidation/enableValidation.js';
 //Создание класса Валидации:
 export class FormValidator {
     constructor(enableValidation, formSelector) {
-            this._formSelector = formSelector;
+        this._formSelector = formSelector;
 
-            this._inputList = Array.from(formSelector.querySelectorAll(enableValidation.inputSelector));
-            this._submitButtonSelector = formSelector.querySelector(enableValidation.submitButtonSelector);
-            this._inputErrorClass = enableValidation.inputErrorClass;
-            this._inactiveButtonClass = enableValidation.inactiveButtonClass;
+        this._inputList = Array.from(formSelector.querySelectorAll(enableValidation.inputSelector));
+        this._submitButtonSelector = formSelector.querySelector(enableValidation.submitButtonSelector);
+        this._inputErrorClass = enableValidation.inputErrorClass;
+        this._inactiveButtonClass = enableValidation.inactiveButtonClass;
     };
     //-----------------------------------------------------------------------------------------------------------------
-    //Функция с вложенным объектом. Поиск всех form.
+    //Функция с вложенным объектом. Поиск всех form:
     enableValidation() {
-        this._setFormValidation();
+        return this._setFormValidation();
     }
     //-----------------------------------------------------------------------------------------------------------------
     //Функция последовательнй проверки на валидность (последовательность). 
     _setFormValidation() {
+        this._toggleButtonState();
         this._inputList.forEach((inputElement) => { 
             inputElement.addEventListener('input', () => {
                 this._toggleInputErrorState(inputElement); 
@@ -67,6 +68,12 @@ export class FormValidator {
     //Функция включения валидации.
     _hasInvalidInput() {
         return this._inputList.some((inputElement) => !inputElement.validity.valid);
+    }
+    resetFormErrors() {
+        this._inputList.forEach((inputElement) => {
+            const errorElement = this._formSelector.querySelector(`#${inputElement.id}-error`); 
+            this._hideInputError(inputElement, errorElement);
+        });
     }
 }
 

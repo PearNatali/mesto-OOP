@@ -11,6 +11,7 @@ export function openPopup(popup) {
   popup.addEventListener('click', closePopupByOverlayClick);
   document.addEventListener('keydown', closePopupOnEscape);
 };
+//-----------------------------------------------------------------------------------------------------------------
 //Функция закрытия popup через Esc.
 function closePopupOnEscape(evt) {
   if (evt.key === 'Escape') {
@@ -18,11 +19,10 @@ function closePopupOnEscape(evt) {
     closePopup(opendPopup);
   }
 };
-  //-----------------------------------------------------------------------------------------------------------------
-  //Функция закрытия popup через overlay. 
+//-----------------------------------------------------------------------------------------------------------------
+//Функция закрытия popup через overlay. 
   function closePopupByOverlayClick(evt) {
     if (evt.target === evt.currentTarget) {
-      const opendPopup = document.querySelector('.popup_opened');
-      closePopup(opendPopup);
+      closePopup(evt.target);
     }
 };

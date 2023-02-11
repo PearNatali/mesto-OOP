@@ -27,11 +27,20 @@ const itemPopupInputLink = itemPopup.querySelector('.popup__input_type_link'); /
 
 const itemCardTable = document.querySelector('.card__table'); //Содержимое контейнера для новых карточек. 
 
-const itemOpenButton = profileElement.querySelector('.profile__button'); //Кнопка добавления карточеки.
+const itemOpenButton = profileElement.querySelector('.profile__button'); //Кнопка добавления карточки.
+const templateSelector = document.querySelector('.card-template');
+//-----------------------------------------------------------------------------------------------------------------
+//Инициализация класса валидации:
+const profileValidation = new FormValidator(enableValidation, profileForm);
+profileValidation.enableValidation();
+const itemValidation = new FormValidator(enableValidation, itemForm);
+itemValidation.enableValidation();
 //-----------------------------------------------------------------------------------------------------------------
 // Открытие попапа ред.профиля:
 profileOpenButton.addEventListener('click', function() {
   openPopup(profilePopup);
+  profileForm.reset();
+  profileValidation.resetFormErrors();
   profilePopupInputName.value = profileName.innerText;
   profilePopupInputJob.value = profileJob.innerText;
 });
@@ -39,6 +48,8 @@ profileOpenButton.addEventListener('click', function() {
 // Открытие попапа доб.карточки:
 itemOpenButton.addEventListener('click', function() {
   openPopup(itemPopup);
+  itemForm.reset();
+  itemValidation.resetFormErrors();
 });
 //-----------------------------------------------------------------------------------------------------------------
 //Универсальная функция закрытия для всх попапов:
@@ -49,15 +60,13 @@ closeButtons.forEach((button) => {
 });
 //---------------------------------------------------------------------------------------------------------------
 //Инициализация класса создания карточки:
-function addCard(name, link) {
-  const card = new Card(name, link).getDataCard();
-  itemCardTable.prepend(card);
+function createCard(name, link) {
+  const card = new Card(name, link, templateSelector).getDataCard();
+  return card;
 }
 //-----------------------------------------------------------------------------------------------------------------
 //Перебор карточек:
-items.forEach((item) => {
-  addCard(item.name, item.link)
-});
+items.forEach((item) => {itemCardTable.prepend(createCard(item.name, item.link))});
 //-----------------------------------------------------------------------------------------------------------------
 //Навешивание слушателя по сохранению данных новой карточки.
 itemForm.addEventListener('submit', submitItemElement);
@@ -65,8 +74,7 @@ itemForm.addEventListener('submit', submitItemElement);
 //Функция сохранения новой карточки:
 function submitItemElement(evt) {
   evt.preventDefault();
-  addCard(itemPopupInputTitle.value, itemPopupInputLink.value);
-  itemForm.reset();
+  itemCardTable.prepend(createCard(itemPopupInputTitle.value, itemPopupInputLink.value));
   closePopup(itemPopup);
 };
 //-----------------------------------------------------------------------------------------------------------------
@@ -82,9 +90,3 @@ function handleProfileFormSubmit (evt) {
 //-----------------------------------------------------------------------------------------------------------------
 //Навешивание слушателя по сохранению данных ред.профиля.
 profileForm.addEventListener('submit', handleProfileFormSubmit);
-//-----------------------------------------------------------------------------------------------------------------
-//Инициализация класса валидации:
-const profileValidation = new FormValidator(enableValidation, profilePopup);
-const itemValidation = new FormValidator(enableValidation, itemPopup);
-profileValidation.enableValidation();
-itemValidation.enableValidation();
